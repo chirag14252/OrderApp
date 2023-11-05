@@ -1,4 +1,5 @@
 import LogoImg from "../assets/logo.jpg"
+import Button from "./UI/Button";
 const Header = ()=>{
     return(
    
@@ -8,7 +9,7 @@ const Header = ()=>{
         <h1>GharKaJayeka</h1>
         </div>
          <nav>
-            <button>Cart (0)</button>
+           <Button textOnly>Cart</Button>
          </nav>
        </header>
     )
