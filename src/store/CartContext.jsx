@@ -35,17 +35,21 @@ const itemReducer = (state, action) => {
         return { ...state, items: UpdatedItems }
     }
     if (action.type == "Delete-item") {
+        console.log(state.items);
         const exisitingCartItemIndex = state.items.findIndex((item) => {
             return item.id === action.id;
         })
-        const exisitingItem = state.item[exisitingCartItemIndex];
+      
+        const exisitingItem = state.items[exisitingCartItemIndex];
+
         const updatedItems = [...state.items];
         if (exisitingItem.quantity == 1) {
-            exisitingItem.splice(exisitingCartItemIndex, 1);
+            updatedItems.splice(exisitingCartItemIndex, 1);
+            
         }
         else {
             const UpdatedItem = {
-                ...allItems,
+                ...exisitingItem,
                 quantity: exisitingItem.quantity - 1
             }
             updatedItems[exisitingCartItemIndex] = UpdatedItem;
@@ -77,3 +81,5 @@ export function CardContextProvider({ children }) {
 }
 
 export default CartContext;
+
+

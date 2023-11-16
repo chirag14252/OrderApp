@@ -2,18 +2,21 @@ import LogoImg from "../assets/logo.jpg"
 import Button from "./UI/Button";
 import CartContext from "../store/CartContext";
 import { useContext } from "react";
-import userProgressContext from "../store/userProgressContext";
+import UserProgressContext from "../store/userProgressContext";
 const Header = ()=>{
   const Cardctx = useContext(CartContext);
   
-  const userProgressCtx = useContext(userProgressContext);
-  console.log(userProgressCtx);
+  const userProgressCtx = useContext(UserProgressContext);
+  
   const TotalCartItems =  Cardctx.items.reduce((accum,item)=>{
     return accum += item.quantity;
   },0)
+
   function handleShowCart(){
     userProgressCtx.showCart();
+    console.log(userProgressCtx.progress);
   }
+
     return(
        <header id = "main-header">
         <div id="title">
