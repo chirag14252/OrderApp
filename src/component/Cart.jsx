@@ -10,7 +10,9 @@ import CartItem from "./CartItem"
 
 
 const Cart = ({payment})=>{    
+   
   const CartCtx  = useContext(CartContext);
+
   const userProgressCtx = useContext(UserProgressContext);
   const cartTotal = CartCtx.items.reduce((acc,curr)=>{
   return acc + curr.quantity*curr.price;
@@ -19,7 +21,7 @@ const Cart = ({payment})=>{
    const CartCloseHndler = ()=> {
     userProgressCtx.hideCart();
    }
-
+  console.log(cartTotal);
    return(
     <Modal className = "cart" open={userProgressCtx.progress === 'showCart'}>
         <h1>Cart</h1>
@@ -33,10 +35,10 @@ const Cart = ({payment})=>{
       <p className="cart-total"> {currencyFormatter.format(cartTotal)} </p>
       <p className="modal-actions">
         <Button textOnly onClick={CartCloseHndler}>Close</Button>
-        <Button onClick={()=>{
+        {(CartCtx.items.length > 0) && <Button onClick={()=>{
           CartCloseHndler();
-          payment();
-        }}>Go to Checkout</Button>
+          payment(cartTotal);
+        }}>Go to Checkout</Button>}
       </p>
     </Modal>
    )

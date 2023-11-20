@@ -1,15 +1,23 @@
 import { useContext } from "react";
  
-export default async function displayRazor(amount){
+export default async function displayRazor(cartAmount){
+ 
+//  post request to the nodeJS server
+const reqbody = {
+  amount: cartAmount
+}
 
- //post request to the nodeJS server
  const data = await fetch("http://localhost:3000/razorpay", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
   },
-
-}).then((t) => t.json());
+  body: JSON.stringify({
+    amount: cartAmount
+  })
+}).then((res)=>{
+   return res.json();
+});
  //option
 
  const option = {

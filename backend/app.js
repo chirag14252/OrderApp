@@ -9,10 +9,10 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 
 const app = express();
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
-app.use(cors());
+
 
 
 
@@ -45,7 +45,7 @@ app.get("/logo.png", async (req, res) => {
 
 app.post("/razorpay",async (req,res)=>{
   const payment_capture = 1;
-  const amount = 2;
+  const amount = req.body.amount;
   const currency = 'INR';
 const option = {
   amount: amount *100,
