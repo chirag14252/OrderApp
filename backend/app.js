@@ -43,6 +43,17 @@ app.get("/logo.png", async (req, res) => {
   }
 });
 
+
+//receive the order
+
+app.post("/receiveOrder",(req,res)=>{
+   const data = req.body;
+   return res.status(200).json({
+    data
+   })
+})
+
+
 app.post("/razorpay",async (req,res)=>{
   const payment_capture = 1;
   const amount = req.body.amount;
