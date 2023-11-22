@@ -17,13 +17,16 @@ const Cart = ({payment})=>{
   const cartTotal = CartCtx.items.reduce((acc,curr)=>{
   return acc + curr.quantity*curr.price;
   },0)
-   //function for closing the cart 
-   const CartCloseHndler = ()=> {
+   //function for opening the checkout
+   const CheckoutHndler = () =>{
+     userProgressCtx.showCheckout();
+   }
+   const CartCloseHndler = ()=>{
     userProgressCtx.hideCart();
    }
   console.log(cartTotal);
    return(
-    <Modal className = "cart" open={userProgressCtx.progress === 'showCart'}>
+    <Modal className = "cart" open={userProgressCtx.progress === 'showCart'} onClose={userProgressCtx.progress === 'showCart'?CartCloseHndler:null}>
         <h1>Cart</h1>
         <ul>
         {
@@ -36,8 +39,8 @@ const Cart = ({payment})=>{
       <p className="modal-actions">
         <Button textOnly onClick={CartCloseHndler}>Close</Button>
         {(CartCtx.items.length > 0) && <Button onClick={()=>{
-          CartCloseHndler();
-          payment(cartTotal);
+         CheckoutHndler();
+          // payment(cartTotal);
         }}>Go to Checkout</Button>}
       </p>
     </Modal>

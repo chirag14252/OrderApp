@@ -5,6 +5,7 @@ import { UserProgressContextProvider } from "./store/userProgressContext";
 import { useEffect } from "react";
 import Cart from "./component/Cart";
 import displayRazor from "./util/paymentGateway.js";
+import Checkout from "./component/Checkout.jsx";
 
 function App() {
   const loadscript = (src)=>{
@@ -32,6 +33,7 @@ function App() {
       <Header/>
       <Food/>
       <Cart payment={displayRazor}/>
+      <Checkout/>
       </CardContextProvider>
      </UserProgressContextProvider>
   );
