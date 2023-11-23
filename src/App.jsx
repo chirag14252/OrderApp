@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import Cart from "./component/Cart";
 import displayRazor from "./util/paymentGateway.js";
 import Checkout from "./component/Checkout.jsx";
+import Register from "./component/Register.jsx";
 
 function App() {
   const loadscript = (src)=>{
@@ -28,14 +29,15 @@ function App() {
   loadscript("http://checkout.razorpay.com/v1/checkout.js")
   },[])
   return (
-     <UserProgressContextProvider>
-     <CardContextProvider>
-      <Header/>
-      <Food/>
-      <Cart payment={displayRazor}/>
-      <Checkout/>
-      </CardContextProvider>
-     </UserProgressContextProvider>
+    //  <UserProgressContextProvider>
+    //  <CardContextProvider>
+    //   <Header/>
+    //   <Food/>
+    //   <Cart payment={displayRazor}/>
+    //   <Checkout/>
+    //   </CardContextProvider>
+    //  </UserProgressContextProvider>
+    <Register/>
   );
 }
 

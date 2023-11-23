@@ -5,14 +5,29 @@ import path from "path";
 import cors from "cors";
 import shortid from "shortid";
 import razorpay from "razorpay";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt"
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-
+import mongoose from 'mongoose';
+import userModal from './modals/userDetailsModal.js';
 const app = express();
 app.use(cors());
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(express.static('public'));
-
+mongoose.connect("mongodb+srv://USER:X4YtymbjdkRYcfT5@atlascluster.nilxnts.mongodb.net/OrderApp?retryWrites=true&w=majority").then((res, err) => {
+  if (res) {
+    console.log("database connected");
+  }
+})
 
 
 
@@ -28,7 +43,7 @@ app.get("/logo.png", async (req, res) => {
     // Use import.meta.url to get the current file's URL,
     // then convert it to the file path using fileURLToPath.
     const currentFilePath = fileURLToPath(import.meta.url);
-    
+
     // Get the directory name using the dirname function.
     const currentDir = dirname(currentFilePath);
 
@@ -44,47 +59,90 @@ app.get("/logo.png", async (req, res) => {
 });
 
 
-//receive the order
+//register
+//logic should be handled
+app.post("/register", (req, res) => {
+  console.log(req.body);
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = bcrypt.hashSync(req.body.password,10);
+  const passLen = req.body.password.length;
+  if (!name || !email || !passLen) {
+    return res.status(400).json({
+      message: "fill all the details properly"
+    })
+  }
+  //already present email
 
-app.post("/receiveOrder",(req,res)=>{
-   const data = req.body;
-   return res.status(200).json({
-    data
-   })
+  userModal.findOne({name:name}).
+  then((data, err) => {
+    if (data) {
+      //if already present , data is returned
+      return res.json({
+        message: "this user is unavailable"
+      })
+    }
+    else {
+        userModal.create({
+          name:name,
+          email:email,
+          password:password
+        }).then((data, err) => {
+          if (data) {
+            return res.status(201).json({
+              message: "user successfully registered",
+              data:data
+            })
+          }
+        })
+    }
+  })
 })
 
+// const middleware = (req,res,next )=>{
+//   jwt.verify()
+// }
 
-app.post("/razorpay",async (req,res)=>{
+// const jsonTokenGn = ()=>{
+
+// }
+app.post("/login")
+
+
+
+
+
+
+
+
+
+
+//payment
+
+app.post("/razorpay", async (req, res) => {
   const payment_capture = 1;
   const amount = req.body.amount;
   const currency = 'INR';
-const option = {
-  amount: amount *100,
-  currency:currency,
-  receipt: shortid.generate(),
-  payment_capture
-};
-  try{
-   const response = await razorpayInstance.orders.create(option);
-   console.log(response);
-     res.json({
-      id:response.id,
-      currency:response.currency,
-      amount:response.amount
-     })
+  const option = {
+    amount: amount * 100,
+    currency: currency,
+    receipt: shortid.generate(),
+    payment_capture
+  };
+  try {
+    const response = await razorpayInstance.orders.create(option);
+    console.log(response);
+    res.json({
+      id: response.id,
+      currency: response.currency,
+      amount: response.amount
+    })
   }
-  catch(error){
-   console.log (error);
+  catch (error) {
+    console.log(error);
   }
 
 })
-
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
 
 app.get('/meals', async (req, res) => {
   const meals = await fs.readFile('./data/available-meals.json', 'utf8');
@@ -94,7 +152,7 @@ app.get('/meals', async (req, res) => {
 app.post('/orders', async (req, res) => {
   const orderData = req.body.order;
 
-  if (orderData === null || orderData.items === null ) {
+  if (orderData === null || orderData.items === null) {
     return res
       .status(400)
       .json({ message: 'Missing data.' });
@@ -137,6 +195,6 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-app.listen(3000,()=>{
+app.listen(3000, () => {
   console.log("server is running at port : 3000")
 });
