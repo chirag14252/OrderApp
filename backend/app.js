@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import mongoose from 'mongoose';
 import userModal from './modals/userDetailsModal.js';
+
 const app = express();
 app.use(cors());
 
@@ -99,11 +100,9 @@ app.post("/register", (req, res) => {
     })
 })
 
-// const middleware = (req,res,next )=>{
-//   jwt.verify()
-// }
+ 
+//creating middlewares
 
-//
 
 
 
@@ -118,14 +117,18 @@ const tokenGeneration = (user_id) => {
 //verify token
 const verifyToken = (req,res,next)=>{
       //how to user verify token
-
-
-
-
-
-
-
-
+       const tokenBearer = req.headers['Authorization'];
+       const token = tokenBearer.split(' ')[1];
+       jwt.verify(token,'secret',(err,decoded)=>{
+        if(decoded){
+            next();
+        }
+        if(err){
+          return res.status(500).json({
+            message:"some error occured"
+          })
+        }
+       })
 }
 
 
@@ -138,13 +141,14 @@ app.post("/login", async (req, res) => {
       message: "pls fill the detail properly"
     })
   }
+
   userModal.findOne({ name: username }).then((data, err) => {
     if (data) {
       const isPassword = bcrypt.compareSync(password, data.password);
       if (isPassword) {
         return res.status(200).json({
           message: "you are login successfully",
-          token: tokenGeneration(data._id)
+          token:tokenGeneration(data._id)
         })
       }
       else {
@@ -163,8 +167,18 @@ app.post("/login", async (req, res) => {
 
 
 
+//each order will be associated with user_id for storin the data and unique 
+// searching for that data.
+
+app.post("/order",verifyToken,(req,res)=>{
+  
+return res.status(200).json({
+  message: "data receieved"
+})
 
 
+
+})
 
 
 
