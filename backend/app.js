@@ -6,7 +6,7 @@ import cors from "cors";
 import shortid from "shortid";
 import razorpay from "razorpay";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt"
+import bcrypt, { compareSync } from "bcrypt"
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import mongoose from 'mongoose';
@@ -65,7 +65,7 @@ app.post("/register", (req, res) => {
   console.log(req.body);
   const name = req.body.name;
   const email = req.body.email;
-  const password = bcrypt.hashSync(req.body.password,10);
+  const password = bcrypt.hashSync(req.body.password, 10);
   const passLen = req.body.password.length;
   if (!name || !email || !passLen) {
     return res.status(400).json({
@@ -74,39 +74,92 @@ app.post("/register", (req, res) => {
   }
   //already present email
 
-  userModal.findOne({name:name}).
-  then((data, err) => {
-    if (data) {
-      //if already present , data is returned
-      return res.json({
-        message: "this user is unavailable"
-      })
-    }
-    else {
+  userModal.findOne({ name: name }).
+    then((data, err) => {
+      if (data) {
+        //if already present , data is returned
+        return res.json({
+          message: "this user is unavailable"
+        })
+      }
+      else {
         userModal.create({
-          name:name,
-          email:email,
-          password:password
+          name: name,
+          email: email,
+          password: password
         }).then((data, err) => {
           if (data) {
             return res.status(201).json({
               message: "user successfully registered",
-              data:data
+              data: data
             })
           }
         })
-    }
-  })
+      }
+    })
 })
 
 // const middleware = (req,res,next )=>{
 //   jwt.verify()
 // }
 
-// const jsonTokenGn = ()=>{
+//
 
-// }
-app.post("/login")
+
+
+
+const tokenGeneration = (user_id) => {
+  const token = jwt.sign({ data: user_id }, 'secret', { expiresIn: '1hr' });
+  return token;
+}
+
+
+
+//verify token
+const verifyToken = (req,res,next)=>{
+      //how to user verify token
+
+
+
+
+
+
+
+
+}
+
+
+app.post("/login", async (req, res) => {
+  console.log(req.body);
+  const username = req.body?.name;
+  const password = req.body?.password;
+  if (!username) {
+    return res.status(400).json({
+      message: "pls fill the detail properly"
+    })
+  }
+  userModal.findOne({ name: username }).then((data, err) => {
+    if (data) {
+      const isPassword = bcrypt.compareSync(password, data.password);
+      if (isPassword) {
+        return res.status(200).json({
+          message: "you are login successfully",
+          token: tokenGeneration(data._id)
+        })
+      }
+      else {
+        return res.status(400).json({
+          messsge: "invalid password"
+        })
+      }
+    }
+    else {
+      return res.status(400).json({
+        message: "invalid username"
+      })
+    }
+  })
+})
 
 
 
