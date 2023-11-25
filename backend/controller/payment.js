@@ -1,5 +1,13 @@
+import shortid from "shortid";
+import razorpay from "razorpay";
+import dotenv from "dotenv";
+dotenv.config();
 
 
+const razorpayInstance = new razorpay({
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET
+  });
 
 const payment = async (req,res)=>{
     const payment_capture = 1;

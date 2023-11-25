@@ -1,5 +1,13 @@
+import userModal from "../modals/userDetailsModal.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
 
 
+const tokenGeneration = (user_id) => {
+    const token = jwt.sign({ data: user_id }, 'secret', { expiresIn: '1hr' });
+    return token;
+  }
+  
 const loginController = async (req,res)=>{
     console.log(req.body);
   const username = req.body?.name;

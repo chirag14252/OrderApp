@@ -1,3 +1,5 @@
+import userModal from "../modals/userDetailsModal.js";
+import bcrypt from "bcrypt";
 
 
 const register = async (req,res)=>{

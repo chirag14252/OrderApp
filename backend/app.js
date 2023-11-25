@@ -15,6 +15,9 @@ import loginController from './controller/loginController.js';
 import payment from './controller/payment.js';
 import register from './controller/register.js';
 import getLogo from './controller/getLogo.js';
+import dotenv from "dotenv";
+import { orderRoute } from './Route/orderRouter.js';
+dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -35,15 +38,6 @@ mongoose.connect("mongodb+srv://USER:X4YtymbjdkRYcfT5@atlascluster.nilxnts.mongo
 })
 
 
-
-//initialize the credentials
-
-const razorpayInstance = new razorpay({
-  key_id: "rzp_test_4Eo3nivh6HgiYl",
-  key_secret: "3FVTfpUpdhl024q35LUCzgFW"
-});
-
-
 //getting logo for payment
 app.get("/logo.png",getLogo);
 
@@ -52,16 +46,14 @@ app.get("/logo.png",getLogo);
 app.post("/register",register)
 
  
+
+
 //creating middlewares
 
 
 
 
 //token generation
-const tokenGeneration = (user_id) => {
-  const token = jwt.sign({ data: user_id }, 'secret', { expiresIn: '1hr' });
-  return token;
-}
 
 
 
@@ -80,21 +72,6 @@ const verifyToken = (req,res,next)=>{
         }
        })
 }
-
-
-
-
-
-
-//each order will be associated with user_id for storin the data and unique 
-// searching for that data.
-
-app.post("/order",verifyToken,(req,res)=>{
-return res.status(200).json({
-  message: "data receieved"
-})
-})
-
 
 //login
 app.post("/login", loginController);
@@ -144,6 +121,15 @@ app.post('/orders', async (req, res) => {
   res.status(201).json({ message: 'Order created!' });
 });
 
+//API  for crud operation in order details.
+app.use("/order-details",orderRoute)
+
+
+
+
+
+
+
 app.use((req, res) => {
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
@@ -155,3 +141,5 @@ app.use((req, res) => {
 app.listen(3000, () => {
   console.log("server is running at port : 3000")
 });
+
+
