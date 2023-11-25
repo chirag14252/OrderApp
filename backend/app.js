@@ -1,20 +1,11 @@
 import fs from 'node:fs/promises';
 import bodyParser from 'body-parser';
 import express from "express";
-import path from "path";
 import cors from "cors";
-import shortid from "shortid";
-import razorpay from "razorpay";
-import jwt from "jsonwebtoken";
-import bcrypt, { compareSync } from "bcrypt"
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import mongoose from 'mongoose';
-import userModal from './modals/userDetailsModal.js';
 import loginController from './controller/loginController.js';
 import payment from './controller/payment.js';
 import register from './controller/register.js';
-import getLogo from './controller/getLogo.js';
 import dotenv from "dotenv";
 import { orderRoute } from './Route/orderRouter.js';
 dotenv.config();
@@ -38,46 +29,19 @@ mongoose.connect("mongodb+srv://USER:X4YtymbjdkRYcfT5@atlascluster.nilxnts.mongo
 })
 
 
-//getting logo for payment
-app.get("/logo.png",getLogo);
 
 
 //register
 app.post("/register",register)
 
- 
-
-
-//creating middlewares
-
-
-
-
-//token generation
-
-
-
-//verify token
-const verifyToken = (req,res,next)=>{
-       const tokenBearer = req.headers['Authorization'];
-       const token = tokenBearer.split(' ')[1];
-       jwt.verify(token,'secret',(err,decoded)=>{
-        if(decoded){
-            next();
-        }
-        if(err){
-          return res.status(500).json({
-            message:"some error occured"
-          })
-        }
-       })
-}
 
 //login
 app.post("/login", loginController);
+
 //payment 
 app.post("/razorpay",payment)
 
+//Items available at our store.
 app.get('/meals', async (req, res) => {
   const meals = await fs.readFile('./data/available-meals.json', 'utf8');
   res.json(JSON.parse(meals));
@@ -123,11 +87,6 @@ app.post('/orders', async (req, res) => {
 
 //API  for crud operation in order details.
 app.use("/order-details",orderRoute)
-
-
-
-
-
 
 
 app.use((req, res) => {

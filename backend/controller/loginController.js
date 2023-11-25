@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 
 
 const tokenGeneration = (user_id) => {
-    const token = jwt.sign({ data: user_id }, 'secret', { expiresIn: '1hr' });
+    const token = jwt.sign({ user_id }, 'secret', { expiresIn: '1hr' });
     return token;
   }
   
