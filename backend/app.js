@@ -14,6 +14,7 @@ import userModal from './modals/userDetailsModal.js';
 import loginController from './controller/loginController.js';
 import payment from './controller/payment.js';
 import register from './controller/register.js';
+import getLogo from './controller/getLogo.js';
 
 const app = express();
 app.use(cors());
@@ -42,29 +43,12 @@ const razorpayInstance = new razorpay({
   key_secret: "3FVTfpUpdhl024q35LUCzgFW"
 });
 
-app.get("/logo.png", async (req, res) => {
-  try {
-    // Use import.meta.url to get the current file's URL,
-    // then convert it to the file path using fileURLToPath.
-    const currentFilePath = fileURLToPath(import.meta.url);
 
-    // Get the directory name using the dirname function.
-    const currentDir = dirname(currentFilePath);
-
-    // Create the path to the logo.png file.
-    const imagePath = path.join(currentDir, "logo.jpg");
-
-    // Send the file as a response
-    res.sendFile(imagePath);
-  } catch (error) {
-    console.error("Error serving logo.png:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+//getting logo for payment
+app.get("/logo.png",getLogo);
 
 
 //register
-//logic should be handled
 app.post("/register",register)
 
  
@@ -73,7 +57,7 @@ app.post("/register",register)
 
 
 
-
+//token generation
 const tokenGeneration = (user_id) => {
   const token = jwt.sign({ data: user_id }, 'secret', { expiresIn: '1hr' });
   return token;
@@ -83,7 +67,6 @@ const tokenGeneration = (user_id) => {
 
 //verify token
 const verifyToken = (req,res,next)=>{
-      //how to user verify token
        const tokenBearer = req.headers['Authorization'];
        const token = tokenBearer.split(' ')[1];
        jwt.verify(token,'secret',(err,decoded)=>{
@@ -107,11 +90,9 @@ const verifyToken = (req,res,next)=>{
 // searching for that data.
 
 app.post("/order",verifyToken,(req,res)=>{
-  
 return res.status(200).json({
   message: "data receieved"
 })
-
 })
 
 
