@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken"
 const verifyToken = (req,res,next)=>{
      const tokenBearer = req.headers.authorization;
     const token = tokenBearer.split(' ')[1];
+    
     if(!token){
       return res.status(400).json({
         message:"user unauthorized"
@@ -11,7 +12,8 @@ const verifyToken = (req,res,next)=>{
 
     jwt.verify(token,'secret',(err,decoded)=>{
      if(decoded){
-         req.user_id = decoded.data;
+      
+         req.user_id = decoded.user_id;
          next();
      }
      if(err){
