@@ -1,4 +1,5 @@
 import userModal from "../modals/userDetailsModal.js";
+import cartModal from "../modals/cartDetailsModal.js";
 import bcrypt from "bcrypt";
 
 
@@ -30,13 +31,22 @@ const register = async (req,res)=>{
             password: password
           }).then((data, err) => {
             if (data) {
-              return res.status(201).json({
-                message: "user successfully registered",
-                data: data
+              const userId = data._id.toString();
+              cartModal.create({
+                userId:userId
+              }).then((data,err)=>{
+                if(data){
+                  return res.status(201).json({
+                    message: "user successfully registered",
+                    data: data
+                  })
+                }
               })
             }
           })
+           
         }
+         
       })
 }
 
