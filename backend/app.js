@@ -11,6 +11,9 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import mongoose from 'mongoose';
 import userModal from './modals/userDetailsModal.js';
+import loginController from './controller/loginController.js';
+import payment from './controller/payment.js';
+import register from './controller/register.js';
 
 const app = express();
 app.use(cors());
@@ -62,43 +65,7 @@ app.get("/logo.png", async (req, res) => {
 
 //register
 //logic should be handled
-app.post("/register", (req, res) => {
-  console.log(req.body);
-  const name = req.body.name;
-  const email = req.body.email;
-  const password = bcrypt.hashSync(req.body.password, 10);
-  const passLen = req.body.password.length;
-  if (!name || !email || !passLen) {
-    return res.status(400).json({
-      message: "fill all the details properly"
-    })
-  }
-  //already present email
-
-  userModal.findOne({ name: name }).
-    then((data, err) => {
-      if (data) {
-        //if already present , data is returned
-        return res.json({
-          message: "this user is unavailable"
-        })
-      }
-      else {
-        userModal.create({
-          name: name,
-          email: email,
-          password: password
-        }).then((data, err) => {
-          if (data) {
-            return res.status(201).json({
-              message: "user successfully registered",
-              data: data
-            })
-          }
-        })
-      }
-    })
-})
+app.post("/register",register)
 
  
 //creating middlewares
@@ -132,38 +99,7 @@ const verifyToken = (req,res,next)=>{
 }
 
 
-app.post("/login", async (req, res) => {
-  console.log(req.body);
-  const username = req.body?.name;
-  const password = req.body?.password;
-  if (!username) {
-    return res.status(400).json({
-      message: "pls fill the detail properly"
-    })
-  }
 
-  userModal.findOne({ name: username }).then((data, err) => {
-    if (data) {
-      const isPassword = bcrypt.compareSync(password, data.password);
-      if (isPassword) {
-        return res.status(200).json({
-          message: "you are login successfully",
-          token:tokenGeneration(data._id)
-        })
-      }
-      else {
-        return res.status(400).json({
-          messsge: "invalid password"
-        })
-      }
-    }
-    else {
-      return res.status(400).json({
-        message: "invalid username"
-      })
-    }
-  })
-})
 
 
 
@@ -176,40 +112,13 @@ return res.status(200).json({
   message: "data receieved"
 })
 
-
-
 })
 
 
-
-
-
-//payment
-
-app.post("/razorpay", async (req, res) => {
-  const payment_capture = 1;
-  const amount = req.body.amount;
-  const currency = 'INR';
-  const option = {
-    amount: amount * 100,
-    currency: currency,
-    receipt: shortid.generate(),
-    payment_capture
-  };
-  try {
-    const response = await razorpayInstance.orders.create(option);
-    console.log(response);
-    res.json({
-      id: response.id,
-      currency: response.currency,
-      amount: response.amount
-    })
-  }
-  catch (error) {
-    console.log(error);
-  }
-
-})
+//login
+app.post("/login", loginController);
+//payment 
+app.post("/razorpay",payment)
 
 app.get('/meals', async (req, res) => {
   const meals = await fs.readFile('./data/available-meals.json', 'utf8');
