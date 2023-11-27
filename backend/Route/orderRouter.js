@@ -16,8 +16,13 @@ orderRoute.get("/get-order", (req, res) => {
     if(data){
    return res.status(200).json({
     message:"data fetched",
-    data:data
+    cart :data
    })
+  }
+   if(err){
+    return res.status(500).json({
+      message:"internal server error"
+    })   
   }
   })
 

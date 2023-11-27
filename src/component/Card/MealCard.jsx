@@ -1,12 +1,14 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import {currencyFormatter} from '../../util/Formatting.js'
 import Button from '../UI/Button.jsx';
 import CartContext from '../../store/CartContext.jsx'
+import debounce from 'lodash/debounce.js';
+
 
 const MealCard = ({data})=>{
     const CartCtx = useContext(CartContext);
      const addItem = ()=>{
-       CartCtx.addItem(data);
+       CartCtx.addItem(data); 
      }
     return(
         <li id={data.id} className="meal-item">
@@ -22,7 +24,6 @@ const MealCard = ({data})=>{
             <p className="meal-item-actions">
             <Button onClick={addItem}>Add to Cart</Button>
             </p>
-           
         </article>
     </li>
     )

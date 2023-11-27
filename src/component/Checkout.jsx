@@ -5,6 +5,8 @@ import UserProgressContext from "../store/userProgressContext";
 import CartContext from "../store/CartContext";
 import Input from "./UI/Input";
 import Button from "./UI/Button";
+import axiosInst from "../../axiosInst";
+import axios from "axios";
 
 const Checkout = ()=>{
     const CartCtx  = useContext(CartContext);
@@ -13,6 +15,7 @@ const Checkout = ()=>{
     const cartTotal = CartCtx.items.reduce((acc,curr)=>{
         return acc + curr.quantity*curr.price;
         },0);
+
 
 
  const closeHndler = ()=>{
@@ -32,11 +35,9 @@ const Checkout = ()=>{
              </div>
             <p className="modal-actions">
                 <Button type = "button" textOnly onClick={closeHndler}>Close</Button>
-                <Button >Submit Order</Button>
+                <Button onClick={""}>Submit Order</Button>
             </p>
            </form>
-        
-        
         </Modal>
     )
 }

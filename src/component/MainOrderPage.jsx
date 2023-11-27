@@ -1,12 +1,11 @@
 import Header from "./Header.jsx"
 import Food from "./Food.jsx"
-import {CardContextProvider} from "../store/CartContext.jsx"
-import { UserProgressContextProvider } from "../store/userProgressContext.jsx";
+import CartContext, {CardContextProvider} from "../store/CartContext.jsx"
+import { UserProgressContextProvider } from "../store/userProgressContext.jsx"
 import Cart from "./Cart.jsx"
 import displayRazor from "../util/paymentGateway.js"
 import Checkout from "./Checkout.jsx";
-import { useEffect } from "react";
-
+import { useContext, useEffect } from "react";
 
 const loadscript = (src)=>{
     return new Promise((resolve)=>{
@@ -25,14 +24,20 @@ const loadscript = (src)=>{
   }
 
 
-const MainOrderPage = ()=>{
 
+
+const MainOrderPage = ()=>{
+ 
+  
   useEffect(()=>{
     //payment script to be loaded on document programmtically.
   loadscript("http://checkout.razorpay.com/v1/checkout.js") 
+     
   },[])
+
   
     return(
+      <>
       <UserProgressContextProvider>
       <CardContextProvider>
       <Header/>
@@ -40,7 +45,8 @@ const MainOrderPage = ()=>{
       <Cart payment={displayRazor}/>
       <Checkout/>
       </CardContextProvider>
-     </UserProgressContextProvider>  
+     </UserProgressContextProvider> 
+     </>
     )
 }
 

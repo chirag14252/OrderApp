@@ -9,9 +9,11 @@ const Login=()=>{
         event.preventDefault();
         const fd = new FormData(event.target);
         const reqBody = Object.fromEntries(fd.entries());
-        const data = await axios.post("http://localhost:3000/login",reqBody);
-        if(data){
-            console.log(data);
+        const res = await axios.post("http://localhost:3000/login",reqBody);
+        if(res){
+           
+            localStorage.setItem("token",res.data.token);
+            
             navigate("/MainOrder");
         }
     }

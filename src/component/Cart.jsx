@@ -14,6 +14,7 @@ const Cart = ({payment})=>{
   const CartCtx  = useContext(CartContext);
 
   const userProgressCtx = useContext(UserProgressContext);
+
   const cartTotal = CartCtx.items.reduce((acc,curr)=>{
   return acc + curr.quantity*curr.price;
   },0)
@@ -24,7 +25,7 @@ const Cart = ({payment})=>{
    const CartCloseHndler = ()=>{
     userProgressCtx.hideCart();
    }
-  console.log(cartTotal);
+  
    return(
     <Modal className = "cart" open={userProgressCtx.progress === 'showCart'} onClose={userProgressCtx.progress === 'showCart'?CartCloseHndler:null}>
         <h1>Cart</h1>
