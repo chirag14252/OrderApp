@@ -5,11 +5,15 @@ import {Routes,Route, Navigate } from "react-router-dom"
 function App() {
   return (
     <Routes>
-       <Route path = "/MainOrder" Component={
-        MainOrderPage
-        }/>
-       <Route path="*" Component={()=>{localStorage.getItem("token")?Navigate({to:"/MainOrder"}):<Login/>}}/>
-       <Route path="/register" Component={Register}/>
+       <Route path="/home" Component={()=>{
+        const token = localStorage.getItem("token");
+        return token?<MainOrderPage/>:Navigate({to:"/login"});
+       }}/>
+       <Route path="/login" Component={()=>{
+        const token = localStorage.getItem("token");
+        return token?Navigate({to:"/login"}):<Login/>
+       }}/>
+       <Route path="/register" element={<Register/>}/>
     </Routes>
   );
 }

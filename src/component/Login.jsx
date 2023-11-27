@@ -14,7 +14,7 @@ const Login=()=>{
            
             localStorage.setItem("token",res.data.token);
             
-            navigate("/MainOrder");
+            navigate("/home");
         }
     }
     return(

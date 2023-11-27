@@ -11,7 +11,7 @@ const Modal = ({children,open,onClose,className})=>{
    if(open){
    dialog.current.showModal();
    }
-   return()=>dialog.current.close();
+   return()=>dialog.current?.close();
    },[open]);
    
     return(

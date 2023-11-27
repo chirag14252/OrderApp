@@ -3,9 +3,10 @@ import Button from "./UI/Button";
 import CartContext from "../store/CartContext";
 import { useContext } from "react";
 import UserProgressContext from "../store/userProgressContext";
+import { useNavigate } from "react-router-dom";
 const Header = ()=>{
-  const Cardctx = useContext(CartContext);
-  
+  const Cardctx  = useContext(CartContext);
+  const navigate = useNavigate();
   const userProgressCtx = useContext(UserProgressContext);
   
   const TotalCartItems =  Cardctx.items.reduce((accum,item)=>{
@@ -16,7 +17,10 @@ const Header = ()=>{
     userProgressCtx.showCart();
     console.log(userProgressCtx.progress);
   }
-
+  function tokenRemover(){
+   localStorage.removeItem("token")
+    navigate("/login")
+  }
     return(
        <header id = "main-header">
         <div id="title">
@@ -25,6 +29,7 @@ const Header = ()=>{
         </div>
          <nav>
            <Button textOnly onClick={handleShowCart}>Cart({TotalCartItems})</Button>
+           <Button textOnly onClick={tokenRemover}>Logout</Button>
          </nav>
        </header>
     )
