@@ -25,8 +25,6 @@ orderRoute.get("/get-order", (req, res) => {
     })   
   }
   })
-
-  
 })
 
 
