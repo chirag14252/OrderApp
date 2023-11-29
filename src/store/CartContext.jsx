@@ -1,4 +1,4 @@
-import { Children, createContext, useEffect, useReducer } from "react";
+import { Children, createContext, useContext, useEffect, useReducer } from "react";
 import debounce from 'lodash/debounce.js'
 import axiosInst from "../../axiosInst";
 
@@ -7,7 +7,7 @@ const CartContext = createContext({
     addItem: (item) => { },
     deleteItem: (id) => { },
     updateCall:()=>{},
-    setItem:()=>{}
+    setCall:()=>{}
 })
 
 const itemReducer = (state, action) => {
@@ -60,8 +60,8 @@ const itemReducer = (state, action) => {
         }
         return { ...state, items: updatedItems };
     }
-    if(action.item == "set-item"){
-       return {...state,items:action.item}
+    if(action.type == "set-item"){
+       return {...state,items:action.items}
     }
     return state;
 }
@@ -70,33 +70,28 @@ const itemReducer = (state, action) => {
 export function CardContextProvider({ children }) {
     
     const [cart, dispatchCartAction] = useReducer(itemReducer, { items: [] })
-   
+    const cartCtx = useContext(CartContext);
     function addItem(item) {
-        dispatchCartAction({ type: "Add-item", item: item })
+        dispatchCartAction({ type: "Add-item", item: item });
+      console.log(item);
     }
 
     function deleteItem(id) {
-        dispatchCartAction({ type: "Delete-item", id: id })
+        dispatchCartAction({ type: "Delete-item", id: id });
     }
-    const setItem = () => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const res = await axiosInst().get("/order-details/get-order");
-                console.log("data fetched");
-                dispatchCartAction({ type: "set-item", items: res.data.cart.items });
-                resolve(); // Resolve the promise after updating the items
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                reject(error);
-            }
-        });
-    };
+   
     const updateCall = debounce(() => {
         axiosInst().patch('/order-details/update-order', { items: cart.items }).then((res) => {
             console.log('data updated');
         });
+      
     }, 500); // Adjust the debounce delay as needed
-   
+     
+    const setCall = async ()=>{
+     const order = await axiosInst().get("/order-details/get-order");
+     dispatchCartAction({type:"set-item",items:order.data.cart.items});
+    //  dispatchCartAction({type:"set-item",items:order.data.cart.items});
+    }
 
    
     const createContext = {
@@ -104,7 +99,7 @@ export function CardContextProvider({ children }) {
         addItem,
         deleteItem,
         updateCall,
-        setItem
+        setCall
     }
 
     

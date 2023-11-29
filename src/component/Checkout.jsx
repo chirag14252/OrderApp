@@ -8,7 +8,7 @@ import Button from "./UI/Button";
 import axiosInst from "../../axiosInst";
 import axios from "axios";
 
-const Checkout = ()=>{
+const Checkout = ({payment})=>{
     const CartCtx  = useContext(CartContext);
     const userProgressCtx = useContext(UserProgressContext);
     
@@ -35,7 +35,7 @@ const Checkout = ()=>{
              </div>
             <p className="modal-actions">
                 <Button type = "button" textOnly onClick={closeHndler}>Close</Button>
-                <Button onClick={""}>Submit Order</Button>
+                <Button onClick={()=>{payment(cartTotal)}}>Submit Order</Button>
             </p>
            </form>
         </Modal>

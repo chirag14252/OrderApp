@@ -7,6 +7,7 @@ import displayRazor from "../util/paymentGateway.js"
 import Checkout from "./Checkout.jsx";
 import { useContext, useEffect } from "react";
 
+
 const loadscript = (src)=>{
     return new Promise((resolve)=>{
       const script = document.createElement("script");
@@ -27,23 +28,23 @@ const loadscript = (src)=>{
 
 
 const MainOrderPage = ()=>{
- 
+
   
   useEffect(()=>{
     //payment script to be loaded on document programmtically.
   loadscript("http://checkout.razorpay.com/v1/checkout.js") 
      
   },[])
-
   
+   
     return(
       <>
       <UserProgressContextProvider>
       <CardContextProvider>
       <Header/>
       <Food/>
-      <Cart payment={displayRazor}/>
-      <Checkout/>
+      <Cart />
+      <Checkout payment={displayRazor}/>    
       </CardContextProvider>
      </UserProgressContextProvider> 
      </>

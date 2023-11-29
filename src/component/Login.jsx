@@ -10,10 +10,8 @@ const Login=()=>{
         const fd = new FormData(event.target);
         const reqBody = Object.fromEntries(fd.entries());
         const res = await axios.post("http://localhost:3000/login",reqBody);
-        if(res){
-           
-            localStorage.setItem("token",res.data.token);
-            
+        if(res){   
+            localStorage.setItem("token",res.data.token);          
             navigate("/home");
         }
     }

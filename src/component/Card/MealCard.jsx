@@ -6,10 +6,10 @@ import debounce from 'lodash/debounce.js';
 
 
 const MealCard = ({data})=>{
-    const CartCtx = useContext(CartContext);
-     const addItem = ()=>{
-       CartCtx.addItem(data); 
-     }
+    const cartCtx = useContext(CartContext);
+    const addToCart = (data)=>{
+       cartCtx.addItem(data);
+    }
     return(
         <li id={data.id} className="meal-item">
         <article>
@@ -22,7 +22,7 @@ const MealCard = ({data})=>{
             </p>
             </div>
             <p className="meal-item-actions">
-            <Button onClick={addItem}>Add to Cart</Button>
+            <Button onClick={()=>{addToCart(data)}}>Add to Cart</Button>
             </p>
         </article>
     </li>

@@ -5,7 +5,7 @@ import axiosInst from "../../axiosInst";
 import CartItem from "./CartItem";
 const Food = () => {
     const [FoodItem, setFoodItem] = useState([]);
-    const CartItx = useContext(CartContext);
+    const  CartCtx = useContext(CartContext);
     //fetch at page Load
     const callApi = async () => {
         const response = fetch("http://localhost:3000/meals").then((res) => {
@@ -13,16 +13,15 @@ const Food = () => {
         })
         const data = await response;
         setFoodItem(data)
-      
     }
   
 
     useEffect(() => {
        callApi();
-       CartItx.updateCall();
-    },[CartItx.items])
-
-
+       CartCtx.setCall();
+    },[])
+     
+    
     return (
         <>
             <ul id="meals">

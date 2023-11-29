@@ -25,7 +25,6 @@ const reqbody = {
   currency:data.currency,
   amount:data.amount,
   description:"order for ghar ka jayeka",
-  image:"http://localhost:3000/logo.jpg",
   handler:(res)=>{
    alert("order_id" + res.razorpay_order_id);
    alert("payment_id" + res.razorpay_payment_id);
