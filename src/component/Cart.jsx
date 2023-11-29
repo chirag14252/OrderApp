@@ -9,7 +9,7 @@ import CartItem from "./CartItem"
 
 
 
-const Cart = ({payment})=>{    
+const Cart = ()=>{    
    
   const CartCtx  = useContext(CartContext);
 
@@ -41,7 +41,6 @@ const Cart = ({payment})=>{
         <Button textOnly onClick={CartCloseHndler}>Close</Button>
         {(CartCtx.items.length > 0) && <Button onClick={()=>{
          CheckoutHndler();
-          // payment(cartTotal);
         }}>Go to Checkout</Button>}
       </p>
     </Modal>
