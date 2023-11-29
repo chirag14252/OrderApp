@@ -10,6 +10,7 @@ const tokenGeneration = (user_id) => {
   
 const loginController = async (req,res)=>{
     console.log(req.body);
+    
   const username = req.body?.name;
   const password = req.body?.password;
   if (!username) {

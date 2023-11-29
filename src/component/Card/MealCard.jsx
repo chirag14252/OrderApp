@@ -7,6 +7,10 @@ import debounce from 'lodash/debounce.js';
 
 const MealCard = ({data})=>{
     const cartCtx = useContext(CartContext);
+    useEffect(()=>{
+        cartCtx.updateCall();
+    },[cartCtx.items])
+   
     const addToCart = (data)=>{
        cartCtx.addItem(data);
     }

@@ -19,7 +19,7 @@ const Header = ()=>{
   }
   function tokenRemover(){
    localStorage.removeItem("token")
-    navigate("/login")
+    navigate("/")
   }
     return(
        <header id = "main-header">
