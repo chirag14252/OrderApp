@@ -3,11 +3,14 @@ import bodyParser from 'body-parser';
 import express from "express";
 import cors from "cors";
 import mongoose from 'mongoose';
+import path from 'node:path';
 import loginController from './controller/loginController.js';
 import payment from './controller/payment.js';
 import register from './controller/register.js';
 import dotenv from "dotenv";
 import { orderRoute } from './Route/orderRouter.js';
+import { forgotPasswordRoute } from './Route/forgotPassword.js';
+
 dotenv.config();
 
 const app = express();
@@ -21,7 +24,8 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static("public"))
+
 mongoose.connect("mongodb+srv://USER:X4YtymbjdkRYcfT5@atlascluster.nilxnts.mongodb.net/OrderApp?retryWrites=true&w=majority").then((res, err) => {
   if (res) {
     console.log("database connected");
@@ -84,6 +88,9 @@ app.post('/orders', async (req, res) => {
   await fs.writeFile('./data/orders.json', JSON.stringify(allOrders));
   res.status(201).json({ message: 'Order created!' });
 });
+
+app.use('/forgot-password',forgotPasswordRoute)
+
 
 //API  for crud operation in order details.
 app.use("/order-details",orderRoute)

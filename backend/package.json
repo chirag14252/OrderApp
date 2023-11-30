@@ -19,6 +19,8 @@
     "express": "^4.18.2",
     "json": "^11.0.0",
     "jsonwebtoken": "^9.0.2",
+    "mailgen": "^2.0.28",
+    "nodemailer": "^6.9.7",
     "path": "^0.12.7",
     "razorpay": "^2.9.2",
     "react-helmet": "^6.1.0",
