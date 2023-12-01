@@ -2,6 +2,8 @@ import StartPage from "./component/StartPage";
 import MainOrderPage from "./component/MainOrderPage.JSX"
 
 import {Routes,Route, Navigate } from "react-router-dom"
+import otp from "./component/OTP/otp";
+import EnterEmail from "./component/OTP/enterEmail";
 
 function App() {
   return (
@@ -20,10 +22,14 @@ function App() {
        }}/>
        <Route path="/home" Component={()=>{
          const token = localStorage.getItem("token");
-         return token?<MainOrderPage/>:Navigate({to:"/startPage"})
+         return token?<MainOrderPage/>:Navigate({to:"/"})
        }}/> 
+       <Route path = "/otp" Component={otp}/>
+       <Route path = "/enterEmail" Component={EnterEmail}/>
     </Routes>
   );
 }
+
+
 
 export default App;

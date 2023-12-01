@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import React from "react";
+
 import "../index.css"
 
 const Login=()=>{
@@ -65,7 +66,7 @@ const Login=()=>{
           <span>or use your account</span>
           <input
             type="name"
-            placeholder="name"
+            placeholder="username"
             name="name"
             value={state.name}
             onChange={handleChange}
@@ -77,7 +78,9 @@ const Login=()=>{
             value={state.password}
             onChange={handleChange}
           />
-          <a href="#">Forgot your password?</a>
+          <a style = {{cursor:"pointer"}}onClick={async()=>{
+            navigate("/enterEmail");
+          }}>Forgot your password?</a>
           <button type="submit">Sign In</button>
         </form>
       </div>
