@@ -111,8 +111,9 @@ forgotPasswordRoute.post("/verify",async(req,res)=>{
 // for updating the password
 forgotPasswordRoute.patch("/reset",async (req,res)=>{
  const email = req.body.email;
- 
+
  const password = bcrypt.hashSync(req.body.password, 10);
+
   userModal.findOneAndUpdate({email:email},{password:password}).then((data,err)=>{
     if(data){
       return res.status(201).json({
