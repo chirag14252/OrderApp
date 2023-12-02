@@ -1,15 +1,16 @@
 import express from "express";
 import nodemailer from "nodemailer";
-import OTPmodal from "../modals/otpModal.js";
 import otpGenerator from "otp-generator";
+import bcrypt from "bcrypt";
+import OTPmodal from "../modals/otpModal.js";
+
+import userModal from "../modals/userDetailsModal.js";
+
 
 
 
 export const forgotPasswordRoute = express.Router();
 
-const sendMail = (otp,email,res) => {
-  
-}
 
 
 //only email will be send via req body
@@ -91,3 +92,40 @@ forgotPasswordRoute.post("/sendOTPMail", async (req, res) => {
 })
 
 
+//endpoint for verifying the otp
+forgotPasswordRoute.post("/verify",async(req,res)=>{
+  const {userEmail,userOTP} =req.body;
+ const data = await OTPmodal.findOne({email:userEmail});
+ if(data.otp == userOTP){
+  return res.status(200).json({
+    message:"user is verified",
+  })
+ }
+  return res.status(401).json({
+    message:"incorrect password"
+  })
+})
+
+
+
+// for updating the password
+forgotPasswordRoute.patch("/reset",async (req,res)=>{
+ const email = req.body.email;
+ 
+ const password = bcrypt.hashSync(req.body.password, 10);
+  userModal.findOneAndUpdate({email:email},{password:password}).then((data,err)=>{
+    if(data){
+      return res.status(201).json({
+        message:"data updated"
+      })
+    }
+    if(err){
+      return res.status(201).json({
+        message:"user not found"
+      })
+    }
+  })
+  
+  
+  
+})
