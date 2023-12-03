@@ -4,6 +4,7 @@ import MainOrderPage from "./component/MainOrderPage.JSX"
 import {Routes,Route, Navigate } from "react-router-dom"
 import otp from "./component/OTP/otp";
 import EnterEmail from "./component/OTP/enterEmail";
+import Reset from "./component/OTP/resetPassword";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
        }}/> 
        <Route path = "/otp" Component={otp}/>
        <Route path = "/enterEmail" Component={EnterEmail}/>
+       <Route path="/resetPassword" Component={Reset}/>
     </Routes>
   );
 }

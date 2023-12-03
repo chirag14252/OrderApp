@@ -1,12 +1,25 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { keys } from "lodash";
 export default function () {
   const [timerCount, setTimer] = React.useState(60);
-  const [OTPinput, setOTPinput] = useState([0, 0, 0, 0]);
+  const navigate = useNavigate();
+  const [OTPinput, setOTPinput] = useState(['', '', '', '']);
+ 
+  const handleChange = (e, index) => {
+   const data = e.target.value;
+   setOTPinput((prev)=>{
+    const newState = [...prev];
+    newState[index] = data;
+    return newState;
+   })
+  
+  };
   const [disable, setDisable] = useState(true);
   const location = useLocation();
+  
   function resendOTP() {
     const email = location.state.email;
     const data = axios.post("http://localhost:3000/forgot-password/sendOTPMail",{email:email});
@@ -18,8 +31,14 @@ export default function () {
     }
   }
 
-  function verfiyOTP() {
-    // Add your logic for verifying OTP
+   function verfiyOTP() {
+    const userOTP = OTPinput.join('');
+    const userEmail = location.state.email;
+    axios.post("http://localhost:3000/forgot-password/verify",{userOTP,userEmail}).then(
+      (res)=>{
+         navigate("/resetPassword",{state:{email:userEmail}});
+      }
+    )
     return;
   }
 
@@ -33,6 +52,7 @@ export default function () {
       });
     }, 1000); // each count lasts for a second
     // cleanup the interval on complete
+   
     return () => clearInterval(interval);
   }, [disable]);
 
@@ -42,7 +62,7 @@ export default function () {
         <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
           <div style={{ fontWeight: "bold", fontSize: "1.5rem" ,fontfamily: 'san-serif'}}>Email Verification</div>
           <div style={{ display: "flex", flexDirection: "row", fontSize: "0.875rem", color: "#808080" }}>
-            <p style={{fontfamily: 'san-serif'}}>We have sent a code to your email {"your email"}</p>
+            <p style={{fontfamily: 'san-serif'}}>We have sent a code to  <b>{location.state.email}</b></p>
           </div>
         </div>
 
@@ -73,7 +93,8 @@ export default function () {
                       type="text"
                       name=""
                       id=""
-                      onChange={(e) => ""}
+                      value={OTPinput[index]}
+                      onChange={(e)=>{handleChange(e,index)}}
                     ></input>
                   </div>
                 ))}
