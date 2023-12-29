@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(express.static("public"))
 
-mongoose.connect("mongodb+srv://USER:X4YtymbjdkRYcfT5@atlascluster.nilxnts.mongodb.net/OrderApp?retryWrites=true&w=majority").then((res, err) => {
+mongoose.connect(`${process.env.DB}`).then((res, err) => {
   if (res) {
     console.log("database connected");
   }
